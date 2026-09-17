@@ -357,7 +357,7 @@ class MovieWayApp(App):
 
         # Notification
         notification = Label(
-            text="🔔\n1",
+            text="N1",
             color=WHITE,
             font_size=dp(14),
             halign="center",
@@ -369,7 +369,7 @@ class MovieWayApp(App):
 
         # Profile
         profile = RoundedButton(
-            text="👤",
+            text="Me",
             bg_color=CARD2,
             font_size=dp(20),
             size_hint_x=None,
@@ -405,11 +405,11 @@ class MovieWayApp(App):
         )
 
         buttons = [
-            ("🏠 Home", self.build_home),
-            ("🔥 Trending", self.show_trending),
-            ("🎬 Movies", self.show_movies),
-            ("📺 TV Shows", self.show_tv),
-            ("⚽ Football", self.show_football)
+            (" Home", self.build_home),
+            (" Trending", self.show_trending),
+            (" Movies", self.show_movies),
+            (" TV Shows", self.show_tv),
+            (" Football", self.show_football)
         ]
 
         for text, function in buttons:
@@ -478,7 +478,7 @@ class MovieWayApp(App):
         featured.add_widget(label)
 
         title = Label(
-            text="🎩  THE GENERAL",
+            text=" THE GENERAL",
             color=WHITE,
             bold=True,
             font_size=dp(25),
@@ -490,7 +490,7 @@ class MovieWayApp(App):
         featured.add_widget(title)
 
         description = Label(
-            text="1926  •  Comedy • Adventure  •  ⭐ 8.1\nA classic silent comedy adventure.",
+            text="1926  •  Comedy • Adventure  •   8.1\nA classic silent comedy adventure.",
             color=GRAY,
             font_size=dp(12),
             halign="left",
@@ -502,7 +502,7 @@ class MovieWayApp(App):
         featured.add_widget(description)
 
         watch = RoundedButton(
-            text="▶  WATCH NOW",
+            text="  WATCH NOW",
             bg_color=GREEN,
             color=(0, 0, 0, 1),
             bold=True,
@@ -643,11 +643,11 @@ class MovieWayApp(App):
         )
 
         buttons = [
-            ("🏠\nHome", self.build_home),
-            ("📖\nNovelHub", self.show_novel),
-            ("🔥\nFight Zone", self.show_fight),
-            ("📥\nDownloads", self.show_downloads),
-            ("👤\nMe", self.show_profile)
+            ("Home", self.build_home),
+            ("NovelHub", self.show_novel),
+            ("Fight Zone", self.show_fight),
+            ("Downloads", self.show_downloads),
+            ("Me", self.show_profile)
         ]
 
         for text, function in buttons:
@@ -709,7 +709,7 @@ class MovieWayApp(App):
 
         # Update notice
         notice = RoundedButton(
-            text="ℹ  New MOVIEWAY version available",
+            text="  New MOVIEWAY version available",
             bg_color=(0.08, 0.18, 0.12, 1),
             color=GREEN,
             font_size=dp(12),
@@ -724,7 +724,7 @@ class MovieWayApp(App):
         page.add_widget(notice)
 
         page.add_widget(
-            self.section_title("🔥 Trending")
+            self.section_title(" Trending")
         )
 
         page.add_widget(
@@ -734,7 +734,7 @@ class MovieWayApp(App):
         )
 
         page.add_widget(
-            self.section_title("🏆 Series Rankings")
+            self.section_title(" Series Rankings")
         )
 
         page.add_widget(
@@ -807,7 +807,7 @@ class MovieWayApp(App):
 
         page.add_widget(
             self.section_title(
-                f"🔎 Search results for: {query}"
+                f" Search results for: {query}"
             )
         )
 
@@ -820,7 +820,7 @@ class MovieWayApp(App):
         else:
 
             empty = Label(
-                text="😕 No movies found",
+                text=" No movies found",
                 color=GRAY,
                 font_size=dp(18)
             )
@@ -874,7 +874,7 @@ class MovieWayApp(App):
             text=(
                 f'{movie["year"]}\n'
                 f'{movie["genre"]}\n'
-                f'⭐ {movie["rating"]}'
+                f' {movie["rating"]}'
             ),
             color=GRAY,
             font_size=dp(14)
@@ -883,7 +883,7 @@ class MovieWayApp(App):
         content.add_widget(info)
 
         watch = RoundedButton(
-            text="▶ WATCH",
+            text=" WATCH",
             bg_color=GREEN,
             color=(0, 0, 0, 1),
             bold=True,
@@ -894,7 +894,7 @@ class MovieWayApp(App):
         content.add_widget(watch)
 
         download = RoundedButton(
-            text="📥 DOWNLOAD",
+            text=" DOWNLOAD",
             bg_color=CARD2,
             color=WHITE,
             size_hint_y=None,
@@ -975,7 +975,7 @@ class MovieWayApp(App):
 
         self.main.add_widget(
             self.section_title(
-                f"🎬 {category}"
+                f" {category}"
             )
         )
 
@@ -1030,7 +1030,7 @@ class MovieWayApp(App):
         )
 
         self.main.add_widget(
-            self.section_title("🎬 All Movies")
+            self.section_title(" All Movies")
         )
 
         self.main.add_widget(
@@ -1055,7 +1055,7 @@ class MovieWayApp(App):
         Popup(
             title="TV Shows",
             content=Label(
-                text="📺 TV Shows\n\nComing soon to MOVIEWAY!",
+                text=" TV Shows\n\nComing soon to MOVIEWAY!",
                 color=WHITE,
                 font_size=dp(16)
             ),
@@ -1072,7 +1072,7 @@ class MovieWayApp(App):
         Popup(
             title="Football",
             content=Label(
-                text="⚽ Football\n\nFootball section coming soon!",
+                text=" Football\n\nFootball section coming soon!",
                 color=WHITE,
                 font_size=dp(16)
             ),
@@ -1089,7 +1089,7 @@ class MovieWayApp(App):
         Popup(
             title="NovelHub",
             content=Label(
-                text="📖 NovelHub\n\nComing soon!",
+                text=" NovelHub\n\nComing soon!",
                 color=WHITE,
                 font_size=dp(18)
             ),
@@ -1106,7 +1106,7 @@ class MovieWayApp(App):
         Popup(
             title="Fight Zone",
             content=Label(
-                text="🔥 Fight Zone\n\nComing soon!",
+                text=" Fight Zone\n\nComing soon!",
                 color=WHITE,
                 font_size=dp(18)
             ),
@@ -1124,7 +1124,7 @@ class MovieWayApp(App):
             title="Downloads",
             content=Label(
                 text=(
-                    "📥 Downloads\n\n"
+                    " Downloads\n\n"
                     "Your downloaded movies will appear here."
                 ),
                 color=WHITE,
@@ -1144,7 +1144,7 @@ class MovieWayApp(App):
             title="My Profile",
             content=Label(
                 text=(
-                    "👤 MOVIEWAY PROFILE\n\n"
+                    " MOVIEWAY PROFILE\n\n"
                     "Welcome!\n\n"
                     "Favorites: 0\n"
                     "Downloads: 0"
