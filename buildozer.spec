@@ -16,9 +16,3 @@ log_level = 2
 [app:android]
 android.archs = arm64-v8a, armeabi-v7a
 android.accept_sdk_agreement = True
-
-[buildozer:android]
-android_api = 33
-android_minapi = 21
-android_ndk = 25b
-android_sdk = True
