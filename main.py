@@ -8,250 +8,202 @@ from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
 from kivy.uix.popup import Popup
-from kivy.uix.widget import Widget
 from kivy.graphics import Color, RoundedRectangle
-from kivy.clock import Clock
 
 
-# ---------------------------------------------------------
-# MOVIEWAY
-# ---------------------------------------------------------
+# =========================
+# MOVIEWAY COLORS
+# =========================
 
-Window.clearcolor = (0.025, 0.03, 0.04, 1)
-
-
-# ---------------------------------------------------------
-# COLORS
-# ---------------------------------------------------------
-
-BG = (0.025, 0.03, 0.04, 1)
-CARD = (0.055, 0.065, 0.08, 1)
-CARD2 = (0.08, 0.09, 0.11, 1)
-GREEN = (0.1, 0.85, 0.45, 1)
-WHITE = (1, 1, 1, 1)
-GRAY = (0.6, 0.63, 0.68, 1)
-RED = (0.9, 0.12, 0.15, 1)
-BLUE = (0.15, 0.45, 0.95, 1)
+BG = "#0b0b0b"
+CARD = "#171717"
+CARD2 = "#202020"
+GREEN = "#21d46b"
+WHITE = "#ffffff"
+GRAY = "#999999"
+RED = "#e50914"
+BLUE = "#168cff"
 
 
-# ---------------------------------------------------------
+# =========================
+# MOVIE DATA
+# =========================
+
+MOVIES = [
+    {
+        "title": "The General",
+        "year": "1926",
+        "genre": "Comedy • Adventure",
+        "rating": "8.1",
+        "icon": "🚂",
+        "category": "Popular",
+    },
+    {
+        "title": "Nosferatu",
+        "year": "1922",
+        "genre": "Horror • Classic",
+        "rating": "7.8",
+        "icon": "🧛",
+        "category": "Popular",
+    },
+    {
+        "title": "The Kid",
+        "year": "1921",
+        "genre": "Comedy • Drama",
+        "rating": "8.2",
+        "icon": "🎩",
+        "category": "Popular",
+    },
+    {
+        "title": "Metropolis",
+        "year": "1927",
+        "genre": "Sci-Fi • Drama",
+        "rating": "8.3",
+        "icon": "🏙️",
+        "category": "TOP 100",
+    },
+    {
+        "title": "The Lost World",
+        "year": "1925",
+        "genre": "Adventure • Fantasy",
+        "rating": "7.0",
+        "icon": "🦖",
+        "category": "TOP 100",
+    },
+    {
+        "title": "The Great Train Robbery",
+        "year": "1903",
+        "genre": "Western • Classic",
+        "rating": "7.2",
+        "icon": "🤠",
+        "category": "TOP 100",
+    },
+    {
+        "title": "A Trip to the Moon",
+        "year": "1902",
+        "genre": "Fantasy • Adventure",
+        "rating": "8.1",
+        "icon": "🌙",
+        "category": "Anime",
+    },
+    {
+        "title": "The Cabinet of Dr. Caligari",
+        "year": "1920",
+        "genre": "Mystery • Horror",
+        "rating": "8.0",
+        "icon": "🎭",
+        "category": "K-Drama",
+    },
+]
+
+
+# =========================
 # ROUNDED BUTTON
-# ---------------------------------------------------------
+# =========================
 
 class RoundedButton(Button):
 
-    def __init__(self, bg_color=CARD2, radius=12, **kwargs):
+    def __init__(self, bg_color=CARD2, **kwargs):
         super().__init__(**kwargs)
 
         self.background_normal = ""
         self.background_down = ""
         self.background_color = (0, 0, 0, 0)
+        self.color = (1, 1, 1, 1)
 
         with self.canvas.before:
-            Color(*bg_color)
+            Color(
+                rgb=tuple(
+                    int(bg_color[i:i + 2], 16) / 255
+                    for i in (1, 3, 5)
+                )
+            )
             self.rect = RoundedRectangle(
                 pos=self.pos,
                 size=self.size,
-                radius=[dp(radius)]
+                radius=[dp(10)]
             )
 
-        self.bind(
-            pos=self.update_rect,
-            size=self.update_rect
-        )
+        self.bind(pos=self.update_rect, size=self.update_rect)
 
     def update_rect(self, *args):
         self.rect.pos = self.pos
         self.rect.size = self.size
 
 
-# ---------------------------------------------------------
-# MOVIE DATA
-# ---------------------------------------------------------
-
-MOVIES = [
-
-    {
-        "title": "The General",
-        "year": "1926",
-        "genre": "Comedy • Adventure",
-        "rating": "8.1",
-        "emoji": "🚂",
-        "category": "Popular"
-    },
-
-    {
-        "title": "Nosferatu",
-        "year": "1922",
-        "genre": "Horror • Classic",
-        "rating": "7.8",
-        "emoji": "🧛",
-        "category": "Popular"
-    },
-
-    {
-        "title": "The Kid",
-        "year": "1921",
-        "genre": "Comedy • Drama",
-        "rating": "8.2",
-        "emoji": "🎩",
-        "category": "Popular"
-    },
-
-    {
-        "title": "Metropolis",
-        "year": "1927",
-        "genre": "Sci-Fi • Drama",
-        "rating": "8.3",
-        "emoji": "🏙️",
-        "category": "TOP 100"
-    },
-
-    {
-        "title": "The Lost World",
-        "year": "1925",
-        "genre": "Adventure • Fantasy",
-        "rating": "7.0",
-        "emoji": "🦖",
-        "category": "TOP 100"
-    },
-
-    {
-        "title": "The Great Train Robbery",
-        "year": "1903",
-        "genre": "Western • Classic",
-        "rating": "7.2",
-        "emoji": "🤠",
-        "category": "TOP 100"
-    },
-
-    {
-        "title": "A Trip to the Moon",
-        "year": "1902",
-        "genre": "Fantasy • Adventure",
-        "rating": "8.1",
-        "emoji": "🌙",
-        "category": "Anime"
-    },
-
-    {
-        "title": "The Cabinet of Dr. Caligari",
-        "year": "1920",
-        "genre": "Mystery • Horror",
-        "rating": "8.0",
-        "emoji": "🎭",
-        "category": "K-Drama"
-    },
-
-]
-
-
-# ---------------------------------------------------------
+# =========================
 # MOVIE CARD
-# ---------------------------------------------------------
+# =========================
 
 class MovieCard(BoxLayout):
 
     def __init__(self, movie, app, **kwargs):
-
         super().__init__(
             orientation="vertical",
+            spacing=dp(5),
+            padding=dp(7),
             size_hint_y=None,
-            height=dp(235),
-            spacing=dp(6),
-            padding=dp(8),
+            height=dp(220),
             **kwargs
         )
 
         self.movie = movie
         self.app = app
 
-        with self.canvas.before:
-            Color(*CARD)
-            self.bg = RoundedRectangle(
-                pos=self.pos,
-                size=self.size,
-                radius=[dp(12)]
-            )
-
-        self.bind(
-            pos=self.update_bg,
-            size=self.update_bg
-        )
-
-        # Poster
-        poster = Button(
-            text=movie["emoji"],
-            font_size=dp(48),
+        poster = RoundedButton(
+            text=movie["icon"],
+            font_size=dp(42),
+            bg_color=CARD2,
             size_hint_y=None,
-            height=dp(125),
-            background_normal="",
-            background_color=(0.12, 0.15, 0.19, 1)
+            height=dp(115)
         )
 
-        poster.bind(
-            on_release=lambda x: self.app.show_movie(movie)
-        )
+        poster.bind(on_release=lambda x: app.show_movie(movie))
 
         self.add_widget(poster)
 
-        # Title
         title = Label(
             text=movie["title"],
-            color=WHITE,
+            color=(1, 1, 1, 1),
+            font_size=dp(13),
             bold=True,
-            font_size=dp(14),
             halign="left",
             valign="middle",
             size_hint_y=None,
-            height=dp(28)
-        )
-
-        title.bind(
-            size=lambda x, value: setattr(
-                x, "text_size", value
-            )
+            height=dp(32),
+            text_size=(dp(160), dp(32))
         )
 
         self.add_widget(title)
 
-        # Info
         info = Label(
-            text=f'{movie["year"]}  •  ⭐ {movie["rating"]}',
-            color=GRAY,
+            text=f'{movie["year"]} • ⭐ {movie["rating"]}',
+            color=(0.65, 0.65, 0.65, 1),
             font_size=dp(11),
             size_hint_y=None,
-            height=dp(20),
-            halign="left"
+            height=dp(20)
         )
 
         self.add_widget(info)
 
-        # Watch button
         watch = RoundedButton(
-            text="▶ WATCH",
+            text="WATCH",
             bg_color=GREEN,
             color=(0, 0, 0, 1),
             bold=True,
-            font_size=dp(11),
+            font_size=dp(12),
             size_hint_y=None,
-            height=dp(34)
+            height=dp(32)
         )
 
-        watch.bind(
-            on_release=lambda x: self.app.show_movie(movie)
-        )
+        watch.bind(on_release=lambda x: app.show_movie(movie))
 
         self.add_widget(watch)
 
-    def update_bg(self, *args):
-        self.bg.pos = self.pos
-        self.bg.size = self.size
 
-
-# ---------------------------------------------------------
+# =========================
 # MAIN APP
-# ---------------------------------------------------------
+# =========================
 
 class MovieWayApp(App):
 
@@ -259,358 +211,262 @@ class MovieWayApp(App):
 
         self.title = "MOVIEWAY"
 
+        Window.clearcolor = self.hex_color(BG)
+
         self.root_layout = BoxLayout(
             orientation="vertical",
-            spacing=0
+            spacing=dp(5)
         )
-
-        # Main screen
-        self.main = BoxLayout(
-            orientation="vertical"
-        )
-
-        self.root_layout.add_widget(self.main)
 
         self.build_home()
 
         return self.root_layout
 
+    # =========================
+    # COLOR HELPER
+    # =========================
 
-    # -----------------------------------------------------
-    # CLEAR SCREEN
-    # -----------------------------------------------------
+    def hex_color(self, value):
 
-    def clear_main(self):
+        value = value.lstrip("#")
 
-        self.main.clear_widgets()
+        return tuple(
+            int(value[i:i + 2], 16) / 255
+            for i in (0, 2, 4)
+        ) + (1,)
 
-
-    # -----------------------------------------------------
+    # =========================
     # HEADER
-    # -----------------------------------------------------
+    # =========================
 
-    def create_header(self):
+    def build_header(self):
 
         header = BoxLayout(
+            orientation="horizontal",
             size_hint_y=None,
-            height=dp(65),
-            padding=[dp(12), dp(8)],
-            spacing=dp(8)
+            height=dp(60),
+            padding=[dp(8), dp(8)],
+            spacing=dp(6)
         )
 
-        # Logo
         logo = Label(
             text="▶",
-            color=GREEN,
-            bold=True,
-            font_size=dp(28),
+            color=self.hex_color(GREEN),
+            font_size=dp(25),
             size_hint_x=None,
-            width=dp(38)
+            width=dp(35)
         )
 
         header.add_widget(logo)
 
-        brand = Label(
+        title = Label(
             text="MOVIEWAY",
-            color=WHITE,
-            bold=True,
+            color=self.hex_color(WHITE),
             font_size=dp(19),
+            bold=True,
             size_hint_x=None,
-            width=dp(105)
+            width=dp(115)
         )
 
-        header.add_widget(brand)
+        header.add_widget(title)
 
-        # Search
-        self.search_box = TextInput(
+        self.search_input = TextInput(
             hint_text="Search movies...",
             multiline=False,
-            background_color=(0.1, 0.11, 0.14, 1),
-            foreground_color=WHITE,
-            hint_text_color=GRAY,
-            cursor_color=GREEN,
-            padding=[dp(10), dp(10)],
-            size_hint_x=1
+            font_size=dp(12),
+            foreground_color=self.hex_color(WHITE),
+            background_color=self.hex_color(CARD),
+            cursor_color=self.hex_color(GREEN)
         )
 
-        self.search_box.bind(
-            on_text_validate=lambda x: self.search_movies()
-        )
+        header.add_widget(self.search_input)
 
-        header.add_widget(self.search_box)
-
-        search_button = RoundedButton(
+        search = RoundedButton(
             text="SEARCH",
             bg_color=GREEN,
             color=(0, 0, 0, 1),
             bold=True,
             font_size=dp(11),
             size_hint_x=None,
-            width=dp(75)
+            width=dp(70)
         )
 
-        search_button.bind(
-            on_release=lambda x: self.search_movies()
-        )
+        search.bind(on_release=self.search_movies)
 
-        header.add_widget(search_button)
+        header.add_widget(search)
 
-        # Notification
-        notification = Label(
-            text="N1",
-            color=WHITE,
-            font_size=dp(14),
-            halign="center",
-            size_hint_x=None,
-            width=dp(35)
-        )
-
-        header.add_widget(notification)
-
-        # Profile
         profile = RoundedButton(
-            text="Me",
+            text="👤",
             bg_color=CARD2,
-            font_size=dp(20),
+            font_size=dp(18),
             size_hint_x=None,
-            width=dp(42)
+            width=dp(45)
         )
 
-        profile.bind(
-            on_release=lambda x: self.show_profile()
-        )
+        profile.bind(on_release=lambda x: self.profile_popup())
 
         header.add_widget(profile)
 
         return header
 
-
-    # -----------------------------------------------------
+    # =========================
     # TOP NAVIGATION
-    # -----------------------------------------------------
+    # =========================
 
-    def create_top_nav(self):
-
-        nav_scroll = ScrollView(
-            size_hint_y=None,
-            height=dp(48),
-            do_scroll_y=False
-        )
+    def build_top_nav(self):
 
         nav = BoxLayout(
-            size_hint_x=None,
-            width=dp(520),
-            spacing=dp(5),
-            padding=[dp(8), dp(5)]
+            size_hint_y=None,
+            height=dp(42),
+            spacing=dp(4),
+            padding=[dp(5), 0]
         )
 
         buttons = [
-            (" Home", self.build_home),
-            (" Trending", self.show_trending),
-            (" Movies", self.show_movies),
-            (" TV Shows", self.show_tv),
-            (" Football", self.show_football)
+            ("Home", self.build_home),
+            ("Trending", self.show_trending),
+            ("Movies", self.show_movies),
+            ("TV Shows", self.show_tv),
+            ("Football", self.show_football),
         ]
 
         for text, function in buttons:
 
-            btn = RoundedButton(
+            button = RoundedButton(
                 text=text,
-                bg_color=CARD,
-                color=WHITE,
-                font_size=dp(12),
-                size_hint_x=None,
-                width=dp(100)
+                bg_color=CARD2,
+                font_size=dp(10)
             )
 
-            btn.bind(
-                on_release=lambda x, f=function: f()
-            )
+            button.bind(on_release=lambda x, f=function: f())
 
-            nav.add_widget(btn)
+            nav.add_widget(button)
 
-        nav_scroll.add_widget(nav)
+        return nav
 
-        return nav_scroll
+    # =========================
+    # HOME
+    # =========================
 
+    def build_home(self, *args):
 
-    # -----------------------------------------------------
-    # FEATURED MOVIE
-    # -----------------------------------------------------
+        self.root_layout.clear_widgets()
 
-    def create_featured(self):
-
-        featured = BoxLayout(
-            orientation="vertical",
-            size_hint_y=None,
-            height=dp(230),
-            padding=dp(16)
-        )
-
-        with featured.canvas.before:
-            Color(0.08, 0.1, 0.14, 1)
-
-            featured.bg = RoundedRectangle(
-                pos=featured.pos,
-                size=featured.size,
-                radius=[dp(15)]
-            )
-
-        featured.bind(
-            pos=lambda x, y: setattr(
-                featured.bg, "pos", y
-            ),
-            size=lambda x, y: setattr(
-                featured.bg, "size", y
-            )
-        )
-
-        label = Label(
-            text="FEATURED MOVIE",
-            color=GREEN,
-            bold=True,
-            font_size=dp(12),
-            size_hint_y=None,
-            height=dp(25),
-            halign="left"
-        )
-
-        featured.add_widget(label)
-
-        title = Label(
-            text=" THE GENERAL",
-            color=WHITE,
-            bold=True,
-            font_size=dp(25),
-            size_hint_y=None,
-            height=dp(48),
-            halign="left"
-        )
-
-        featured.add_widget(title)
-
-        description = Label(
-            text="1926  •  Comedy • Adventure  •   8.1\nA classic silent comedy adventure.",
-            color=GRAY,
-            font_size=dp(12),
-            halign="left",
-            valign="middle",
-            size_hint_y=None,
-            height=dp(55)
-        )
-
-        featured.add_widget(description)
-
-        watch = RoundedButton(
-            text="  WATCH NOW",
-            bg_color=GREEN,
-            color=(0, 0, 0, 1),
-            bold=True,
-            size_hint_y=None,
-            height=dp(42)
-        )
-
-        watch.bind(
-            on_release=lambda x: self.show_movie(MOVIES[0])
-        )
-
-        featured.add_widget(watch)
-
-        return featured
-
-
-    # -----------------------------------------------------
-    # SECTION TITLE
-    # -----------------------------------------------------
-
-    def section_title(self, title):
-
-        box = BoxLayout(
-            size_hint_y=None,
-            height=dp(48),
-            padding=[dp(8), dp(5)]
-        )
-
-        label = Label(
-            text=title,
-            color=WHITE,
-            bold=True,
-            font_size=dp(19),
-            halign="left"
-        )
-
-        box.add_widget(label)
-
-        return box
-
-
-    # -----------------------------------------------------
-    # CATEGORY TABS
-    # -----------------------------------------------------
-
-    def create_categories(self):
-
-        scroll = ScrollView(
-            size_hint_y=None,
-            height=dp(48),
-            do_scroll_y=False
-        )
-
-        tabs = BoxLayout(
-            size_hint_x=None,
-            width=dp(520),
-            spacing=dp(5),
-            padding=[dp(8), dp(5)]
-        )
-
-        categories = [
-            "Popular",
-            "TOP 100",
-            "Anime",
-            "K-Drama",
-            "Black Drama"
-        ]
-
-        for category in categories:
-
-            btn = RoundedButton(
-                text=category,
-                bg_color=CARD,
-                color=WHITE,
-                font_size=dp(11),
-                size_hint_x=None,
-                width=dp(95)
-            )
-
-            btn.bind(
-                on_release=lambda x, c=category:
-                self.show_category(c)
-            )
-
-            tabs.add_widget(btn)
-
-        scroll.add_widget(tabs)
-
-        return scroll
-
-
-    # -----------------------------------------------------
-    # MOVIE GRID
-    # -----------------------------------------------------
-
-    def create_movie_grid(self, movies=None):
-
-        if movies is None:
-            movies = MOVIES
+        self.root_layout.add_widget(self.build_header())
+        self.root_layout.add_widget(self.build_top_nav())
 
         scroll = ScrollView(
             do_scroll_x=False
         )
 
-        grid = GridLayout(
-            cols=2,
+        content = BoxLayout(
+            orientation="vertical",
             spacing=dp(10),
             padding=dp(10),
+            size_hint_y=None
+        )
+
+        content.bind(
+            minimum_height=content.setter("height")
+        )
+
+        # Featured section
+
+        featured = RoundedButton(
+            text="THE GENERAL\n\n1926 • Comedy • Adventure\n\n⭐ 8.1",
+            bg_color=CARD,
+            font_size=dp(17),
+            size_hint_y=None,
+            height=dp(170)
+        )
+
+        featured.bind(
+            on_release=lambda x: self.show_movie(MOVIES[0])
+        )
+
+        content.add_widget(featured)
+
+        # Update notice
+
+        notice = RoundedButton(
+            text="🔔  New MOVIEWAY version available\n\nUPDATE NOW",
+            bg_color=BLUE,
+            font_size=dp(13),
+            size_hint_y=None,
+            height=dp(85)
+        )
+
+        notice.bind(
+            on_release=lambda x: self.update_popup()
+        )
+
+        content.add_widget(notice)
+
+        # Trending title
+
+        content.add_widget(
+            self.section_title("🔥 TRENDING")
+        )
+
+        content.add_widget(
+            self.movie_grid(MOVIES[:4])
+        )
+
+        content.add_widget(
+            self.section_title("🏆 SERIES RANKINGS")
+        )
+
+        content.add_widget(
+            self.movie_grid(MOVIES[4:])
+        )
+
+        content.add_widget(
+            self.section_title("🎬 MOVIEWAY")
+        )
+
+        content.add_widget(
+            Label(
+                text="Discover movies, series and entertainment.",
+                color=self.hex_color(GRAY),
+                font_size=dp(12),
+                size_hint_y=None,
+                height=dp(40)
+            )
+        )
+
+        scroll.add_widget(content)
+
+        self.root_layout.add_widget(scroll)
+
+        self.root_layout.add_widget(
+            self.bottom_nav()
+        )
+
+    # =========================
+    # SECTION TITLE
+    # =========================
+
+    def section_title(self, text):
+
+        return Label(
+            text=text,
+            color=self.hex_color(WHITE),
+            font_size=dp(18),
+            bold=True,
+            halign="left",
+            size_hint_y=None,
+            height=dp(35)
+        )
+
+    # =========================
+    # MOVIE GRID
+    # =========================
+
+    def movie_grid(self, movies):
+
+        grid = GridLayout(
+            cols=2,
+            spacing=dp(8),
             size_hint_y=None
         )
 
@@ -619,161 +475,129 @@ class MovieWayApp(App):
         )
 
         for movie in movies:
-
             grid.add_widget(
                 MovieCard(movie, self)
             )
 
-        scroll.add_widget(grid)
+        return grid
 
-        return scroll
-
-
-    # -----------------------------------------------------
+    # =========================
     # BOTTOM NAV
-    # -----------------------------------------------------
+    # =========================
 
-    def create_bottom_nav(self):
+    def bottom_nav(self):
 
         nav = BoxLayout(
             size_hint_y=None,
-            height=dp(62),
-            padding=[dp(5), dp(5)],
-            spacing=dp(4)
+            height=dp(55),
+            spacing=dp(3),
+            padding=[dp(4), dp(5)]
         )
 
         buttons = [
-            ("Home", self.build_home),
-            ("NovelHub", self.show_novel),
-            ("Fight Zone", self.show_fight),
-            ("Downloads", self.show_downloads),
-            ("Me", self.show_profile)
+            ("🏠\nHome", self.build_home),
+            ("📖\nNovelHub", self.show_novelhub),
+            ("⚔️\nFight Zone", self.show_fightzone),
+            ("⬇️\nDownloads", self.show_downloads),
+            ("👤\nMe", self.profile_popup),
         ]
 
         for text, function in buttons:
 
-            btn = RoundedButton(
+            button = RoundedButton(
                 text=text,
-                bg_color=CARD,
-                color=WHITE,
-                font_size=dp(10)
+                bg_color=CARD2,
+                font_size=dp(9)
             )
 
-            btn.bind(
+            button.bind(
                 on_release=lambda x, f=function: f()
             )
 
-            nav.add_widget(btn)
+            nav.add_widget(button)
 
         return nav
 
+    # =========================
+    # MOVIE POPUP
+    # =========================
 
-    # -----------------------------------------------------
-    # HOME
-    # -----------------------------------------------------
+    def show_movie(self, movie):
 
-    def build_home(self):
-
-        self.clear_main()
-
-        self.main.add_widget(
-            self.create_header()
-        )
-
-        self.main.add_widget(
-            self.create_top_nav()
-        )
-
-        content = BoxLayout(
-            orientation="vertical"
-        )
-
-        scroll = ScrollView(
-            do_scroll_x=False
-        )
-
-        page = BoxLayout(
+        layout = BoxLayout(
             orientation="vertical",
-            spacing=dp(8),
-            padding=dp(8),
-            size_hint_y=None
+            spacing=dp(10),
+            padding=dp(15)
         )
 
-        page.bind(
-            minimum_height=page.setter("height")
-        )
-
-        page.add_widget(
-            self.create_featured()
-        )
-
-        # Update notice
-        notice = RoundedButton(
-            text="  New MOVIEWAY version available",
-            bg_color=(0.08, 0.18, 0.12, 1),
-            color=GREEN,
-            font_size=dp(12),
-            size_hint_y=None,
-            height=dp(42)
-        )
-
-        notice.bind(
-            on_release=lambda x: self.show_update()
-        )
-
-        page.add_widget(notice)
-
-        page.add_widget(
-            self.section_title(" Trending")
-        )
-
-        page.add_widget(
-            self.create_movie_grid(
-                MOVIES[:6]
+        layout.add_widget(
+            Label(
+                text=movie["icon"],
+                font_size=dp(55)
             )
         )
 
-        page.add_widget(
-            self.section_title(" Series Rankings")
-        )
-
-        page.add_widget(
-            self.create_categories()
-        )
-
-        # Extra movie cards
-        page.add_widget(
-            self.create_movie_grid(
-                MOVIES[2:]
+        layout.add_widget(
+            Label(
+                text=movie["title"],
+                font_size=dp(20),
+                bold=True
             )
         )
 
-        scroll.add_widget(page)
-
-        content.add_widget(scroll)
-
-        self.main.add_widget(content)
-
-        self.root_layout.clear_widgets()
-
-        self.root_layout.add_widget(self.main)
-
-        self.root_layout.add_widget(
-            self.create_bottom_nav()
+        layout.add_widget(
+            Label(
+                text=f'{movie["year"]}\n{movie["genre"]}\n⭐ {movie["rating"]}',
+                font_size=dp(13)
+            )
         )
 
+        watch = Button(
+            text="WATCH",
+            background_color=self.hex_color(GREEN),
+            color=(0, 0, 0, 1)
+        )
 
-    # -----------------------------------------------------
+        layout.add_widget(watch)
+
+        download = Button(
+            text="DOWNLOAD",
+            background_color=self.hex_color(BLUE)
+        )
+
+        download.bind(
+            on_release=lambda x: self.download_popup()
+        )
+
+        layout.add_widget(download)
+
+        close = Button(
+            text="CLOSE"
+        )
+
+        layout.add_widget(close)
+
+        popup = Popup(
+            title="MOVIEWAY",
+            content=layout,
+            size_hint=(0.85, 0.7)
+        )
+
+        close.bind(
+            on_release=popup.dismiss
+        )
+
+        popup.open()
+
+    # =========================
     # SEARCH
-    # -----------------------------------------------------
+    # =========================
 
-    def search_movies(self):
+    def search_movies(self, *args):
 
-        query = self.search_box.text.strip().lower()
+        query = self.search_input.text.strip().lower()
 
         if not query:
-
-            self.build_home()
             return
 
         results = []
@@ -791,137 +615,281 @@ class MovieWayApp(App):
             if query in text:
                 results.append(movie)
 
-        self.clear_main()
+        self.root_layout.clear_widgets()
 
-        self.main.add_widget(
-            self.create_header()
+        self.root_layout.add_widget(
+            self.build_header()
         )
 
-        self.main.add_widget(
-            self.create_top_nav()
+        back = RoundedButton(
+            text="← BACK TO HOME",
+            bg_color=CARD2,
+            size_hint_y=None,
+            height=dp(45)
         )
 
-        page = BoxLayout(
-            orientation="vertical"
+        back.bind(
+            on_release=self.build_home
         )
 
-        page.add_widget(
-            self.section_title(
-                f" Search results for: {query}"
-            )
+        self.root_layout.add_widget(back)
+
+        scroll = ScrollView()
+
+        content = BoxLayout(
+            orientation="vertical",
+            padding=dp(10),
+            spacing=dp(10),
+            size_hint_y=None
+        )
+
+        content.bind(
+            minimum_height=content.setter("height")
         )
 
         if results:
 
-            page.add_widget(
-                self.create_movie_grid(results)
+            content.add_widget(
+                self.section_title(
+                    f"SEARCH RESULTS ({len(results)})"
+                )
+            )
+
+            content.add_widget(
+                self.movie_grid(results)
             )
 
         else:
 
-            empty = Label(
-                text=" No movies found",
-                color=GRAY,
-                font_size=dp(18)
+            content.add_widget(
+                Label(
+                    text="No movies found.",
+                    color=self.hex_color(GRAY),
+                    font_size=dp(18),
+                    size_hint_y=None,
+                    height=dp(100)
+                )
             )
 
-            page.add_widget(empty)
+        scroll.add_widget(content)
 
-        self.main.add_widget(page)
+        self.root_layout.add_widget(scroll)
+
+    # =========================
+    # NAVIGATION PAGES
+    # =========================
+
+    def simple_page(self, title, message):
 
         self.root_layout.clear_widgets()
 
-        self.root_layout.add_widget(self.main)
+        header = self.build_header()
+        self.root_layout.add_widget(header)
 
-        self.root_layout.add_widget(
-            self.create_bottom_nav()
+        back = RoundedButton(
+            text="← HOME",
+            bg_color=CARD2,
+            size_hint_y=None,
+            height=dp(45)
         )
 
+        back.bind(
+            on_release=self.build_home
+        )
 
-    # -----------------------------------------------------
-    # SHOW MOVIE
-    # -----------------------------------------------------
-
-    def show_movie(self, movie):
+        self.root_layout.add_widget(back)
 
         content = BoxLayout(
             orientation="vertical",
-            spacing=dp(12),
-            padding=dp(18)
+            padding=dp(20)
         )
 
-        poster = Label(
-            text=movie["emoji"],
-            font_size=dp(70),
-            size_hint_y=None,
-            height=dp(110)
+        content.add_widget(
+            Label(
+                text=title,
+                font_size=dp(24),
+                bold=True,
+                size_hint_y=None,
+                height=dp(60)
+            )
         )
 
-        content.add_widget(poster)
-
-        title = Label(
-            text=movie["title"],
-            color=WHITE,
-            bold=True,
-            font_size=dp(22),
-            size_hint_y=None,
-            height=dp(40)
+        content.add_widget(
+            Label(
+                text=message,
+                color=self.hex_color(GRAY),
+                font_size=dp(15)
+            )
         )
 
-        content.add_widget(title)
+        self.root_layout.add_widget(content)
 
-        info = Label(
-            text=(
-                f'{movie["year"]}\n'
-                f'{movie["genre"]}\n'
-                f' {movie["rating"]}'
-            ),
-            color=GRAY,
-            font_size=dp(14)
+    def show_trending(self, *args):
+
+        self.simple_page(
+            "🔥 TRENDING",
+            "Trending movies will appear here."
         )
 
-        content.add_widget(info)
+    def show_movies(self, *args):
 
-        watch = RoundedButton(
-            text=" WATCH",
-            bg_color=GREEN,
-            color=(0, 0, 0, 1),
-            bold=True,
-            size_hint_y=None,
-            height=dp(45)
+        self.simple_page(
+            "🎬 MOVIES",
+            "Browse the MOVIEWAY movie collection."
         )
 
-        content.add_widget(watch)
+    def show_tv(self, *args):
 
-        download = RoundedButton(
-            text=" DOWNLOAD",
-            bg_color=CARD2,
-            color=WHITE,
-            size_hint_y=None,
-            height=dp(45)
+        self.simple_page(
+            "📺 TV SHOWS",
+            "TV shows will appear here."
         )
 
-        download.bind(
-            on_release=lambda x:
-            self.download_movie(movie)
+    def show_football(self, *args):
+
+        self.simple_page(
+            "⚽ FOOTBALL",
+            "Football entertainment and updates."
         )
 
-        content.add_widget(download)
+    def show_novelhub(self, *args):
 
-        close = RoundedButton(
-            text="CLOSE",
-            bg_color=RED,
-            color=WHITE,
-            size_hint_y=None,
-            height=dp(40)
+        self.simple_page(
+            "📖 NOVELHUB",
+            "Your NovelHub section."
         )
 
-        content.add_widget(close)
+    def show_fightzone(self, *args):
+
+        self.simple_page(
+            "⚔️ FIGHT ZONE",
+            "Your Fight Zone section."
+        )
+
+    def show_downloads(self, *args):
+
+        self.simple_page(
+            "⬇️ DOWNLOADS",
+            "Downloaded content will appear here."
+        )
+
+    # =========================
+    # PROFILE
+    # =========================
+
+    def profile_popup(self, *args):
+
+        layout = BoxLayout(
+            orientation="vertical",
+            spacing=dp(10),
+            padding=dp(15)
+        )
+
+        layout.add_widget(
+            Label(
+                text="👤 MOVIEWAY PROFILE",
+                font_size=dp(18),
+                bold=True
+            )
+        )
+
+        layout.add_widget(
+            Label(
+                text="Welcome to MOVIEWAY!"
+            )
+        )
+
+        close = Button(
+            text="CLOSE"
+        )
+
+        layout.add_widget(close)
 
         popup = Popup(
-            title="MOVIEWAY",
-            content=content,
-            size_hint=(0.9, 0.8)
+            title="Profile",
+            content=layout,
+            size_hint=(0.8, 0.45)
+        )
+
+        close.bind(
+            on_release=popup.dismiss
+        )
+
+        popup.open()
+
+    # =========================
+    # DOWNLOAD MESSAGE
+    # =========================
+
+    def download_popup(self):
+
+        layout = BoxLayout(
+            orientation="vertical",
+            spacing=dp(10),
+            padding=dp(15)
+        )
+
+        layout.add_widget(
+            Label(
+                text=(
+                    "Downloads will use legal sources.\n\n"
+                    "Only download movies or videos "
+                    "you are allowed to save."
+                ),
+                font_size=dp(14)
+            )
+        )
+
+        close = Button(
+            text="OK"
+        )
+
+        layout.add_widget(close)
+
+        popup = Popup(
+            title="MOVIEWAY DOWNLOADS",
+            content=layout,
+            size_hint=(0.85, 0.5)
+        )
+
+        close.bind(
+            on_release=popup.dismiss
+        )
+
+        popup.open()
+
+    # =========================
+    # UPDATE
+    # =========================
+
+    def update_popup(self):
+
+        layout = BoxLayout(
+            orientation="vertical",
+            spacing=dp(10),
+            padding=dp(15)
+        )
+
+        layout.add_widget(
+            Label(
+                text=(
+                    "New MOVIEWAY version available!\n\n"
+                    "Update information will appear here."
+                ),
+                font_size=dp(14)
+            )
+        )
+
+        close = Button(
+            text="CLOSE"
+        )
+
+        layout.add_widget(close)
+
+        popup = Popup(
+            title="UPDATE REQUIRED",
+            content=layout,
+            size_hint=(0.85, 0.5)
         )
 
         close.bind(
@@ -931,255 +899,9 @@ class MovieWayApp(App):
         popup.open()
 
 
-    # -----------------------------------------------------
-    # DOWNLOAD
-    # -----------------------------------------------------
-
-    def download_movie(self, movie):
-
-        Popup(
-            title="Download",
-            content=Label(
-                text=(
-                    f'{movie["title"]}\n\n'
-                    "Download support will use legal movie sources.\n"
-                    "Only movies you are allowed to download "
-                    "should be saved."
-                ),
-                color=WHITE
-            ),
-            size_hint=(0.85, 0.45)
-        ).open()
-
-
-    # -----------------------------------------------------
-    # CATEGORY
-    # -----------------------------------------------------
-
-    def show_category(self, category):
-
-        results = [
-            m for m in MOVIES
-            if m["category"] == category
-        ]
-
-        self.clear_main()
-
-        self.main.add_widget(
-            self.create_header()
-        )
-
-        self.main.add_widget(
-            self.create_top_nav()
-        )
-
-        self.main.add_widget(
-            self.section_title(
-                f" {category}"
-            )
-        )
-
-        if results:
-
-            self.main.add_widget(
-                self.create_movie_grid(results)
-            )
-
-        else:
-
-            self.main.add_widget(
-                Label(
-                    text="No movies in this category yet.",
-                    color=GRAY,
-                    font_size=dp(16)
-                )
-            )
-
-        self.root_layout.clear_widgets()
-
-        self.root_layout.add_widget(self.main)
-
-        self.root_layout.add_widget(
-            self.create_bottom_nav()
-        )
-
-
-    # -----------------------------------------------------
-    # TRENDING
-    # -----------------------------------------------------
-
-    def show_trending(self):
-
-        self.show_category("Popular")
-
-
-    # -----------------------------------------------------
-    # MOVIES
-    # -----------------------------------------------------
-
-    def show_movies(self):
-
-        self.clear_main()
-
-        self.main.add_widget(
-            self.create_header()
-        )
-
-        self.main.add_widget(
-            self.create_top_nav()
-        )
-
-        self.main.add_widget(
-            self.section_title(" All Movies")
-        )
-
-        self.main.add_widget(
-            self.create_movie_grid(MOVIES)
-        )
-
-        self.root_layout.clear_widgets()
-
-        self.root_layout.add_widget(self.main)
-
-        self.root_layout.add_widget(
-            self.create_bottom_nav()
-        )
-
-
-    # -----------------------------------------------------
-    # TV SHOWS
-    # -----------------------------------------------------
-
-    def show_tv(self):
-
-        Popup(
-            title="TV Shows",
-            content=Label(
-                text=" TV Shows\n\nComing soon to MOVIEWAY!",
-                color=WHITE,
-                font_size=dp(16)
-            ),
-            size_hint=(0.8, 0.4)
-        ).open()
-
-
-    # -----------------------------------------------------
-    # FOOTBALL
-    # -----------------------------------------------------
-
-    def show_football(self):
-
-        Popup(
-            title="Football",
-            content=Label(
-                text=" Football\n\nFootball section coming soon!",
-                color=WHITE,
-                font_size=dp(16)
-            ),
-            size_hint=(0.8, 0.4)
-        ).open()
-
-
-    # -----------------------------------------------------
-    # NOVEL HUB
-    # -----------------------------------------------------
-
-    def show_novel(self):
-
-        Popup(
-            title="NovelHub",
-            content=Label(
-                text=" NovelHub\n\nComing soon!",
-                color=WHITE,
-                font_size=dp(18)
-            ),
-            size_hint=(0.8, 0.4)
-        ).open()
-
-
-    # -----------------------------------------------------
-    # FIGHT ZONE
-    # -----------------------------------------------------
-
-    def show_fight(self):
-
-        Popup(
-            title="Fight Zone",
-            content=Label(
-                text=" Fight Zone\n\nComing soon!",
-                color=WHITE,
-                font_size=dp(18)
-            ),
-            size_hint=(0.8, 0.4)
-        ).open()
-
-
-    # -----------------------------------------------------
-    # DOWNLOADS
-    # -----------------------------------------------------
-
-    def show_downloads(self):
-
-        Popup(
-            title="Downloads",
-            content=Label(
-                text=(
-                    " Downloads\n\n"
-                    "Your downloaded movies will appear here."
-                ),
-                color=WHITE,
-                font_size=dp(16)
-            ),
-            size_hint=(0.85, 0.45)
-        ).open()
-
-
-    # -----------------------------------------------------
-    # PROFILE
-    # -----------------------------------------------------
-
-    def show_profile(self):
-
-        Popup(
-            title="My Profile",
-            content=Label(
-                text=(
-                    " MOVIEWAY PROFILE\n\n"
-                    "Welcome!\n\n"
-                    "Favorites: 0\n"
-                    "Downloads: 0"
-                ),
-                color=WHITE,
-                font_size=dp(16)
-            ),
-            size_hint=(0.85, 0.5)
-        ).open()
-
-
-    # -----------------------------------------------------
-    # UPDATE
-    # -----------------------------------------------------
-
-    def show_update(self):
-
-        Popup(
-            title="MOVIEWAY",
-            content=Label(
-                text=(
-                    "✨ New version available!\n\n"
-                    "MOVIEWAY can be updated when a "
-                    "trusted release is available."
-                ),
-                color=WHITE,
-                font_size=dp(15)
-            ),
-            size_hint=(0.85, 0.45)
-        ).open()
-
-
-# ---------------------------------------------------------
-# START APP
-# ---------------------------------------------------------
+# =========================
+# START MOVIEWAY
+# =========================
 
 if __name__ == "__main__":
     MovieWayApp().run()
